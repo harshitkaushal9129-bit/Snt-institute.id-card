@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SNT Student Verification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen p-4">
+    <div id="loader" class="text-white font-bold">Verifying Records...</div>
+    
+    <div id="card" class="hidden bg-white rounded-3xl overflow-hidden shadow-2xl max-w-sm w-full">
+        <div class="bg-blue-900 p-6 text-center">
+            <div class="w-32 h-32 mx-auto rounded-full border-4 border-white overflow-hidden bg-gray-100">
+                <img id="vImg" src="" class="w-full h-full object-cover">
+            </div>
+            <h2 id="vName" class="text-white text-2xl font-black mt-4 uppercase"></h2>
+            <p class="text-orange-400 font-bold uppercase tracking-widest text-sm">Verified Student</p>
+        </div>
+        
+        <div class="p-6 space-y-4">
+            <div class="flex justify-between border-b pb-2"><b>Roll Number:</b> <span id="vRoll"></span></div>
+            <div class="flex justify-between border-b pb-2"><b>Course:</b> <span id="vCourse"></span></div>
+            <div class="flex justify-between border-b pb-2"><b>Father's Name:</b> <span id="vFather"></span></div>
+            <div class="flex justify-between border-b pb-2"><b>D.O.B:</b> <span id="vDob"></span></div>
+            <div class="bg-green-100 text-green-800 p-3 rounded-lg text-center font-bold">
+                ✅ SNT OFFICIAL RECORD VERIFIED
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+
+        const firebaseConfig = { /* Paste Same Config Here */ };
+        const app = initializeApp(firebaseConfig);
+        const dbRef = ref(getDatabase(app));
+
+        const studentID = new URLSearchParams(window.location.search).get('id');
+
+        if(studentID) {
+            get(child(dbRef, `students/${studentID}`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const s = snapshot.val();
+                    document.getElementById('vImg').src = s.photo;
+                    document.getElementById('vName').innerText = s.name;
+                    document.getElementById('vRoll').innerText = s.rollNo;
+                    document.getElementById('vCourse').innerText = s.course;
+                    document.getElementById('vFather').innerText = s.fatherName;
+                    document.getElementById('vDob').innerText = s.dob;
+                    
+                    document.getElementById('loader').classList.add('hidden');
+                    document.getElementById('card').classList.remove('hidden');
+                } else {
+                    document.getElementById('loader').innerHTML = "❌ INVALID RECORD";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
