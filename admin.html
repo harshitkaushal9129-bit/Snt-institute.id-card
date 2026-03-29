@@ -9,22 +9,34 @@
         /* Screen View Styles */
         .id-card-print {
             width: 95mm; height: 60mm; background: white; border-radius: 12px;
-            overflow: hidden; position: relative; border: 1px solid #003366;
+            overflow: hidden; position: relative; border: 1.5px solid #003366;
             font-family: Arial, sans-serif; margin-bottom: 10px;
         }
         .header-blue {
             background: linear-gradient(90deg, #003366, #004080);
             height: 15mm; display: flex; align-items: center; padding: 0 10px;
         }
-        .details-area { display: flex; padding: 10px; gap: 10px; }
+        .details-area { display: flex; padding: 10px; gap: 12px; height: calc(60mm - 23mm); }
         .photo-frame {
-            width: 32mm; height: 38mm; border: 2px solid #003366;
-            border-radius: 8px; overflow: hidden; background: #f0f4f8;
+            width: 30mm; height: 35mm; border: 2px solid #003366;
+            border-radius: 8px; overflow: hidden; background: #f0f4f8; flex-shrink: 0;
+        }
+        
+        /* QR Code Right Side Fix */
+        .qr-container {
+            position: absolute;
+            right: 15px;
+            bottom: 38px; /* Footer ke thoda upar */
+            text-align: center;
         }
         .qr-wrapper {
-            position: absolute; bottom: 40px; left: 15px; background: white;
-            padding: 3px; border: 1px solid #ccc; border-radius: 4px;
+            background: white;
+            padding: 3px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: inline-block;
         }
+
         .footer-dark {
             background: #00051a; height: 8mm; color: white; width: 100%;
             position: absolute; bottom: 0; display: flex; justify-content: center;
@@ -125,13 +137,13 @@
             const area = document.getElementById('printArea');
             
             if(studentsList.length === 0) {
-                alert("Data abhi load ho raha hai, thoda intezar karein.");
+                alert("Data abhi load ho raha hai...");
                 return;
             }
 
             const selected = studentsList.slice(start, end);
             if(selected.length === 0) {
-                alert("Iss range mein koi data nahi mila!");
+                alert("Range galat hai!");
                 return;
             }
 
@@ -141,27 +153,30 @@
                     <div class="id-card-print">
                         <div class="header-blue">
                             <img src="Logo (1).jpg" class="h-10 bg-white p-1 rounded">
-                            <div class="ml-2 text-white font-bold text-xs uppercase">SNT COMPUTER INSTITUTE</div>
+                            <div class="ml-2 text-white font-bold text-[13px] uppercase tracking-tight">SNT COMPUTER INSTITUTE</div>
                         </div>
                         <div class="details-area">
-                            <div class="photo-frame">
+                            <div class="photo-frame shadow-sm">
                                 <img src="${s.photo}" class="w-full h-full object-cover">
                             </div>
-                            <div class="flex-1">
-                                <h2 class="text-blue-900 font-black text-sm uppercase leading-tight">${s.name}</h2>
+                            <div class="flex-1 pr-16"> <h2 class="text-blue-900 font-black text-[15px] uppercase leading-tight truncate">${s.name}</h2>
                                 <p class="text-orange-600 text-[10px] font-bold italic border-b mb-1 uppercase">${s.course}</p>
-                                <div class="text-[9px] space-y-1">
+                                <div class="text-[9px] space-y-1 mt-2">
                                     <p><b>ROLL:</b> ${s.rollNo}</p>
                                     <p><b>FATHER:</b> ${s.fatherName}</p>
                                     <p><b>D.O.B:</b> ${s.dob}</p>
-                                    <p class="text-[8px] leading-tight mt-1"><b>ADDR:</b> ${s.address}</p>
+                                    <p class="text-[8px] leading-tight mt-1"><b>ADDR:</b> <span class="uppercase">${s.address}</span></p>
                                 </div>
                             </div>
                         </div>
-                        <div class="qr-wrapper shadow-sm">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(s.verifyURL)}" class="w-14 h-14">
+                        
+                        <div class="qr-container">
+                            <div class="qr-wrapper shadow-sm">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(s.verifyURL)}" class="w-14 h-14">
+                            </div>
                         </div>
-                        <div class="footer-dark uppercase">Quality Education & Digital Verification</div>
+                        
+                        <div class="footer-dark uppercase tracking-widest">Quality Education & Digital Verification</div>
                     </div>
                 `;
             });
