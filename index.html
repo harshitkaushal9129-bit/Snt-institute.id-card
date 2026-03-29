@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNT ID Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .id-card { width: 600px; height: 350px; background: white; border-radius: 20px; overflow: hidden; position: relative; border: 1px solid #ddd; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .header-blue { background: linear-gradient(90deg, #003366, #004080); height: 80px; display: flex; justify-content: center; align-items: center; }
+        .footer-dark { background: #00051a; height: 50px; position: absolute; bottom: 0; width: 100%; text-align: center; color: white; display: flex; flex-direction: column; justify-content: center; }
+    </style>
+</head>
+<body class="bg-gray-200 p-5 font-sans">
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-xl shadow-md">
+            <h2 class="text-2xl font-bold mb-4 text-blue-900 border-b-2 border-orange-500 pb-2">Student Details</h2>
+            <form id="idForm" class="space-y-4">
+                <input type="text" id="name" placeholder="Student Name" class="w-full p-2 border rounded" required>
+                <input type="text" id="rollNo" placeholder="Roll No (e.g. SNT-BQBXJ)" class="w-full p-2 border rounded" required>
+                <input type="text" id="fatherName" placeholder="Father's Name" class="w-full p-2 border rounded">
+                <input type="text" id="course" placeholder="Course (CCC, O Level, etc.)" class="w-full p-2 border rounded">
+                
+                <div class="grid grid-cols-3 gap-2">
+                    <select id="dobDay" class="p-2 border rounded"></select>
+                    <select id="dobMonth" class="p-2 border rounded">
+                        <option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option>
+                        <option value="04">Apr</option><option value="05">May</option><option value="06">Jun</option>
+                        <option value="07">Jul</option><option value="08">Aug</option><option value="09">Sep</option>
+                        <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+                    </select>
+                    <select id="dobYear" class="p-2 border rounded"></select>
+                </div>
+                
+                <input type="text" id="contact" placeholder="Contact Number" class="w-full p-2 border rounded">
+                <input type="text" id="address" placeholder="Address" class="w-full p-2 border rounded">
+                
+                <div class="flex gap-2">
+                    <button type="submit" class="flex-1 bg-orange-500 text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition">GENERATE</button>
+                    <button type="button" class="bg-slate-900 text-white px-4 rounded-lg">SWITCH VIEW 🔄</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="flex items-center justify-center">
+            <div id="id-card-preview" class="id-card">
+                <div class="header-blue">
+                    <img src="https://i.imgur.com/your-logo-url.png" alt="SNT Logo" class="h-14 bg-white p-1 rounded">
+                </div>
+                
+                <div class="flex p-4 gap-4">
+                    <div class="w-1/3">
+                        <div class="border-4 border-gray-100 rounded-xl shadow-inner overflow-hidden h-44 w-full bg-gray-50">
+                            <img id="prevImg" src="https://via.placeholder.com/150" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    
+                    <div class="w-2/3">
+                        <h2 id="prevName" class="text-2xl font-black text-blue-900 italic uppercase">STUDENT NAME</h2>
+                        <span id="prevCourse" class="bg-orange-100 text-orange-700 px-3 py-0.5 rounded-full text-sm font-bold border border-orange-300">COURSE</span>
+                        
+                        <div class="mt-4 space-y-1 text-[13px] text-gray-700">
+                            <div class="flex justify-between border-b border-gray-100 pb-1"><strong>ROLL NO</strong> <span id="prevRoll" class="font-bold text-black">SNT-XXXXX</span></div>
+                            <div class="flex justify-between border-b border-gray-100 pb-1"><strong>FATHER</strong> <span id="prevFather" class="font-bold text-black">--</span></div>
+                            <div class="flex justify-between border-b border-gray-100 pb-1"><strong>D.O.B</strong> <span id="prevDob" class="font-bold text-black">--</span></div>
+                            <div class="flex justify-between border-b border-gray-100 pb-1"><strong>CONTACT</strong> <span id="prevContact" class="font-bold text-black">--</span></div>
+                            <div class="flex items-start gap-2 pt-1 text-[11px]">
+                                <strong>ADDRESS:</strong> <span id="prevAddress" class="flex-1 font-bold text-black uppercase leading-tight">--</span>
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=SNT" class="w-16 h-16 border p-1 ml-2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-dark">
+                    <p class="text-xs font-bold tracking-widest uppercase">SNT COMPUTER INSTITUTE</p>
+                    <p class="text-[9px] opacity-70 italic">Quality Education & Digital Verification</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXSZ4T5Yma9Wd28v_GN0zEV4g34SsXmVc",
+            authDomain: "id-card-48ec8.firebaseapp.com",
+            projectId: "id-card-48ec8",
+            storageBucket: "id-card-48ec8.firebasestorage.app",
+            messagingSenderId: "314458314948",
+            appId: "1:314458314948:web:192021fe6cc760dafcd191"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Populate Selects
+        const d = document.getElementById('dobDay'), y = document.getElementById('dobYear');
+        for(let i=1; i<=31; i++) d.innerHTML += `<option value="${i<10?'0'+i:i}">${i}</option>`;
+        for(let i=2030; i>=1995; i--) y.innerHTML += `<option value="${i}">${i}</option>`;
+
+        // Form Submit
+        document.getElementById('idForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const dob = `${d.value}/${document.getElementById('dobMonth').value}/${y.value}`;
+            const data = {
+                name: document.getElementById('name').value,
+                rollNo: document.getElementById('rollNo').value,
+                fatherName: document.getElementById('fatherName').value,
+                course: document.getElementById('course').value,
+                dob: dob,
+                contact: document.getElementById('contact').value,
+                address: document.getElementById('address').value
+            };
+
+            // Preview update
+            document.getElementById('prevName').innerText = data.name;
+            document.getElementById('prevRoll').innerText = data.rollNo;
+            document.getElementById('prevFather').innerText = data.fatherName;
+            document.getElementById('prevCourse').innerText = data.course;
+            document.getElementById('prevDob').innerText = data.dob;
+            document.getElementById('prevContact').innerText = data.contact;
+            document.getElementById('prevAddress').innerText = data.address;
+
+            try {
+                await addDoc(collection(db, "students"), data);
+                alert("ID Generated & Saved!");
+            } catch (err) { alert("Error saving data"); }
+        });
+    </script>
+</body>
+</html>
