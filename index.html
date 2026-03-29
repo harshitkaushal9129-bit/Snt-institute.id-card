@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SNT ID Generator</title>
+    <title>SNT ID Generator | Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .id-card { width: 600px; height: 350px; background: white; border-radius: 20px; overflow: hidden; position: relative; border: 1px solid #ddd; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .header-blue { background: linear-gradient(90deg, #003366, #004080); height: 80px; display: flex; justify-content: center; align-items: center; }
-        .footer-dark { background: #00051a; height: 50px; position: absolute; bottom: 0; width: 100%; text-align: center; color: white; display: flex; flex-direction: column; justify-content: center; }
+        .id-card { width: 450px; height: 280px; background: white; border-radius: 15px; overflow: hidden; position: relative; border: 1px solid #ddd; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .header-blue { background: linear-gradient(90deg, #003366, #004080); height: 60px; display: flex; justify-content: center; align-items: center; }
+        .footer-dark { background: #00051a; height: 35px; position: absolute; bottom: 0; width: 100%; text-align: center; color: white; display: flex; flex-direction: column; justify-content: center; }
     </style>
 </head>
-<body class="bg-gray-200 p-5 font-sans">
+<body class="bg-gray-100 p-5 font-sans">
 
     <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div class="bg-white p-6 rounded-xl shadow-md">
-            <h2 class="text-2xl font-bold mb-4 text-blue-900 border-b-2 border-orange-500 pb-2">Student Details</h2>
-            <form id="idForm" class="space-y-4">
-                <input type="text" id="name" placeholder="Student Name" class="w-full p-2 border rounded" required>
-                <input type="text" id="rollNo" placeholder="Roll No (e.g. SNT-BQBXJ)" class="w-full p-2 border rounded" required>
+        <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-orange-500">
+            <h2 class="text-2xl font-bold mb-4 text-blue-900 border-b pb-2">Student Registration</h2>
+            <form id="idForm" class="space-y-3">
+                <input type="text" id="name" placeholder="Full Name" class="w-full p-2 border rounded uppercase" required>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="rollNo" placeholder="Roll No (e.g. SNT-101)" class="p-2 border rounded" required>
+                    <input type="text" id="course" placeholder="Course (O Level, CCC)" class="p-2 border rounded" required>
+                </div>
                 <input type="text" id="fatherName" placeholder="Father's Name" class="w-full p-2 border rounded">
-                <input type="text" id="course" placeholder="Course (CCC, O Level, etc.)" class="w-full p-2 border rounded">
                 
                 <div class="grid grid-cols-3 gap-2">
                     <select id="dobDay" class="p-2 border rounded"></select>
@@ -36,99 +38,110 @@
                 <input type="text" id="contact" placeholder="Contact Number" class="w-full p-2 border rounded">
                 <input type="text" id="address" placeholder="Address" class="w-full p-2 border rounded">
                 
-                <div class="flex gap-2">
-                    <button type="submit" class="flex-1 bg-orange-500 text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition">GENERATE</button>
-                    <button type="button" class="bg-slate-900 text-white px-4 rounded-lg">SWITCH VIEW 🔄</button>
-                </div>
+                <label class="block text-sm font-bold text-gray-700">Student Photo:</label>
+                <input type="file" id="photoInput" accept="image/*" class="w-full p-1 border rounded" required>
+                
+                <button type="submit" id="saveBtn" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition uppercase">Generate & Save to DB</button>
             </form>
         </div>
 
-        <div class="flex items-center justify-center">
-            <div id="id-card-preview" class="id-card">
+        <div class="flex flex-col items-center justify-center space-y-4">
+            <div id="id-card-preview" class="id-card bg-white border-2">
                 <div class="header-blue">
-                    <img src="Logo (1).jpg" alt="SNT Logo" class="h-14 bg-white p-1 rounded">
+                    <h1 class="text-white font-bold tracking-tighter">SNT COMPUTER INSTITUTE</h1>
                 </div>
                 
-                <div class="flex p-4 gap-4">
-                    <div class="w-1/3">
-                        <div class="border-4 border-gray-100 rounded-xl shadow-inner overflow-hidden h-44 w-full bg-gray-50">
+                <div class="flex p-3 gap-3">
+                    <div class="w-1/3 text-center">
+                        <div class="border-2 border-blue-900 rounded-lg overflow-hidden h-32 w-full bg-gray-50">
                             <img id="prevImg" src="https://via.placeholder.com/150" class="w-full h-full object-cover">
                         </div>
+                        <img id="prevQR" src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=SNT" class="w-16 h-16 mx-auto mt-2 border p-1 bg-white">
                     </div>
                     
-                    <div class="w-2/3">
-                        <h2 id="prevName" class="text-2xl font-black text-blue-900 italic uppercase">STUDENT NAME</h2>
-                        <span id="prevCourse" class="bg-orange-100 text-orange-700 px-3 py-0.5 rounded-full text-sm font-bold border border-orange-300">COURSE</span>
+                    <div class="w-2/3 space-y-1">
+                        <h2 id="prevName" class="text-lg font-black text-blue-900 uppercase leading-none">STUDENT NAME</h2>
+                        <p id="prevCourse" class="text-xs text-orange-600 font-bold uppercase mb-2 italic">COURSE NAME</p>
                         
-                        <div class="mt-4 space-y-1 text-[13px] text-gray-700">
-                            <div class="flex justify-between border-b border-gray-100 pb-1"><strong>ROLL NO</strong> <span id="prevRoll" class="font-bold text-black">SNT-XXXXX</span></div>
-                            <div class="flex justify-between border-b border-gray-100 pb-1"><strong>FATHER</strong> <span id="prevFather" class="font-bold text-black">--</span></div>
-                            <div class="flex justify-between border-b border-gray-100 pb-1"><strong>D.O.B</strong> <span id="prevDob" class="font-bold text-black">--</span></div>
-                            <div class="flex justify-between border-b border-gray-100 pb-1"><strong>CONTACT</strong> <span id="prevContact" class="font-bold text-black">--</span></div>
-                            <div class="flex items-start gap-2 pt-1 text-[11px]">
-                                <strong>ADDRESS:</strong> <span id="prevAddress" class="flex-1 font-bold text-black uppercase leading-tight">--</span>
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=SNT" class="w-16 h-16 border p-1 ml-2">
-                            </div>
+                        <div class="text-[11px] text-gray-800 space-y-0.5">
+                            <p><b>ROLL:</b> <span id="prevRoll">SNT-XXXX</span></p>
+                            <p><b>FATHER:</b> <span id="prevFather">--</span></p>
+                            <p><b>D.O.B:</b> <span id="prevDob">--</span></p>
+                            <p><b>ADDR:</b> <span id="prevAddress" class="uppercase text-[9px]">--</span></p>
                         </div>
                     </div>
                 </div>
-
                 <div class="footer-dark">
-                    <p class="text-xs font-bold tracking-widest uppercase">SNT COMPUTER INSTITUTE</p>
-                    <p class="text-[9px] opacity-70 italic">Quality Education & Digital Verification</p>
+                    <p class="text-[10px] font-bold tracking-widest">OFFICIAL STUDENT ID CARD</p>
                 </div>
             </div>
+            <a href="admin.html" class="text-blue-600 underline font-bold">Go to Admin Print Panel →</a>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
 
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDXSZ4T5Yma9Wd28v_GN0zEV4g34SsXmVc",
             authDomain: "id-card-48ec8.firebaseapp.com",
+            databaseURL: "https://id-card-48ec8-default-rtdb.firebaseio.com",
             projectId: "id-card-48ec8",
             storageBucket: "id-card-48ec8.firebasestorage.app",
             messagingSenderId: "314458314948",
             appId: "1:314458314948:web:192021fe6cc760dafcd191"
         };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
 
-        // Populate Selects
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Populate Dates
         const d = document.getElementById('dobDay'), y = document.getElementById('dobYear');
         for(let i=1; i<=31; i++) d.innerHTML += `<option value="${i<10?'0'+i:i}">${i}</option>`;
-        for(let i=2030; i>=1995; i--) y.innerHTML += `<option value="${i}">${i}</option>`;
+        for(let i=new Date().getFullYear(); i>=1990; i--) y.innerHTML += `<option value="${i}">${i}</option>`;
 
-        // Form Submit
-        document.getElementById('idForm').addEventListener('submit', async (e) => {
+        // Helper: Convert Image to Base64
+        const toBase64 = file => new Promise((res, rej) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => res(reader.result);
+            reader.onerror = e => rej(e);
+        });
+
+        const form = document.getElementById('idForm');
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const dob = `${d.value}/${document.getElementById('dobMonth').value}/${y.value}`;
+            const btn = document.getElementById('saveBtn');
+            btn.innerText = "Saving...";
+            
+            const file = document.getElementById('photoInput').files[0];
+            const photoData = await toBase64(file);
+            const roll = document.getElementById('rollNo').value.toUpperCase();
+            
             const data = {
-                name: document.getElementById('name').value,
-                rollNo: document.getElementById('rollNo').value,
-                fatherName: document.getElementById('fatherName').value,
-                course: document.getElementById('course').value,
-                dob: dob,
+                name: document.getElementById('name').value.toUpperCase(),
+                rollNo: roll,
+                fatherName: document.getElementById('fatherName').value.toUpperCase(),
+                course: document.getElementById('course').value.toUpperCase(),
+                dob: `${d.value}/${document.getElementById('dobMonth').value}/${y.value}`,
                 contact: document.getElementById('contact').value,
-                address: document.getElementById('address').value
+                address: document.getElementById('address').value,
+                photo: photoData,
+                verifyURL: `https://harshitkaushal9129-bit.github.io/Snt-institute.id-card/verify.html?id=${roll}`
             };
 
-            // Preview update
-            document.getElementById('prevName').innerText = data.name;
-            document.getElementById('prevRoll').innerText = data.rollNo;
-            document.getElementById('prevFather').innerText = data.fatherName;
-            document.getElementById('prevCourse').innerText = data.course;
-            document.getElementById('prevDob').innerText = data.dob;
-            document.getElementById('prevContact').innerText = data.contact;
-            document.getElementById('prevAddress').innerText = data.address;
-
-            try {
-                await addDoc(collection(db, "students"), data);
-                alert("ID Generated & Saved!");
-            } catch (err) { alert("Error saving data"); }
+            set(ref(db, 'students/' + roll), data)
+                .then(() => {
+                    alert("Record Saved Successfully!");
+                    btn.innerText = "Generate & Save to DB";
+                    // Update Preview
+                    document.getElementById('prevName').innerText = data.name;
+                    document.getElementById('prevRoll').innerText = data.rollNo;
+                    document.getElementById('prevImg').src = data.photo;
+                    document.getElementById('prevQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(data.verifyURL)}`;
+                })
+                .catch(err => alert("Error: " + err.message));
         });
     </script>
 </body>
