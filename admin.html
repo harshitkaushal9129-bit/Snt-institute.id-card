@@ -3,135 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SNT Admin - Print Panel</title>
+    <title>SNT Admin - Fast Print</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-    /* ID Card Base Styling */
-    .id-card-print {
-        width: 95mm; height: 65mm; background: white; border-radius: 12px;
-        overflow: hidden; position: relative; border: 1px solid #cbd5e1;
-        font-family: 'Segoe UI', Arial, sans-serif; margin: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column;
-    }
-
-    /* Header Section */
-    .header-blue {
-        background: #003366; height: 16mm;
-        display: flex; align-items: center; padding: 0 12px;
-        justify-content: space-between; flex-shrink: 0;
-    }
-    .logo-container {
-        background: white; padding: 2px; border-radius: 4px;
-        height: 12mm; display: flex; align-items: center;
-    }
-    .header-text { color: white; flex-grow: 1; margin-left: 10px; }
-    .header-text h1 { font-size: 13px; font-weight: 800; margin: 0; line-height: 1.2; }
-    .header-text p { font-size: 9px; opacity: 0.9; margin: 0; }
-    
-    .verified-badge {
-        background: #22c55e; color: white; font-size: 9px;
-        font-weight: 800; padding: 3px 12px; border-radius: 20px;
-    }
-
-    /* Main Content Area */
-    .details-area { display: flex; padding: 10px 12px; gap: 12px; flex-grow: 1; }
-    
-    .photo-frame {
-        width: 28mm; height: 32mm; border-radius: 8px;
-        border: 2px solid #003366; overflow: hidden; flex-shrink: 0;
-    }
-
-    .info-content { flex-grow: 1; }
-    .student-name { 
-        color: #1e3a8a; font-size: 18px; font-weight: 900; 
-        text-transform: uppercase; margin: 0;
-    }
-    .course-label { 
-        color: #ea580c; font-size: 11px; font-weight: 800; 
-        font-style: italic; text-transform: uppercase; margin-bottom: 5px;
-    }
-
-    .data-table { font-size: 10px; color: #1f2937; width: 100%; }
-    .data-item { display: flex; margin-bottom: 2px; border-bottom: 0.5px solid #f1f5f9; padding-bottom: 1px;}
-    .data-label { font-weight: 800; width: 60px; color: #4b5563; }
-    .data-val { font-weight: 700; text-transform: uppercase; flex: 1; color: #111827; }
-    
-    .addr-box { margin-top: 4px; }
-    .addr-label { font-size: 8px; font-weight: 800; color: #94a3b8; display: block; }
-    .addr-text { font-size: 9px; font-style: italic; color: #1e40af; line-height: 1; }
-
-    /* New Green Registration Box */
-    .reg-status {
-        background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;
-        margin: 0 10px 8px 10px; padding: 6px 10px; display: flex; align-items: center; gap: 8px;
-    }
-    .check-icon {
-        background: #22c55e; color: white; border-radius: 50%; width: 14px; height: 14px;
-        display: flex; align-items: center; justify-content: center; font-size: 8px; flex-shrink: 0;
-    }
-    .reg-text { font-size: 8.5px; color: #166534; line-height: 1.2; font-weight: 500; }
-    .reg-text b { font-weight: 800; }
-
-    /* QR Positioned Fixed bottom-right of the details area */
-    .qr-container {
-        position: absolute; right: 15px; top: 75px;
-    }
-
-    .footer-strip {
-        background: #00051a; height: 6mm; color: white;
-        display: flex; justify-content: center; align-items: center;
-        font-size: 9px; font-weight: 700; letter-spacing: 1px;
-        text-transform: uppercase; margin-top: auto;
-    }
-</style>
-
+        @media print { .no-print { display: none !important; } .a4-page { width: 210mm; padding: 5mm; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; } .id-card-print { break-inside: avoid; border: 1px solid #003366 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+        .id-card-print { width: 95mm; height: 65mm; background: white; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid #cbd5e1; font-family: system-ui, sans-serif; margin: 10px; display: flex; flex-direction: column; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .header-blue { background: #003366; height: 16mm; display: flex; align-items: center; padding: 0 10px; color: white; }
+        .logo-box { background: white; padding: 2px; border-radius: 4px; height: 12mm; width: 12mm; display: flex; align-items: center; justify-content: center; }
+        .header-text { margin-left: 10px; flex-grow: 1; }
+        .header-text h1 { font-size: 13px; font-weight: 800; margin: 0; line-height: 1; }
+        .header-text p { font-size: 9px; margin: 0; opacity: 0.8; }
+        .verified { background: #22c55e; font-size: 8px; font-weight: 900; padding: 2px 8px; border-radius: 10px; }
+        .details { display: flex; padding: 10px; gap: 10px; flex-grow: 1; position: relative; }
+        .photo { width: 28mm; height: 32mm; border: 2px solid #003366; border-radius: 6px; object-cover: cover; }
+        .info { flex-grow: 1; }
+        .name { color: #1e3a8a; font-size: 16px; font-weight: 900; text-transform: uppercase; margin-bottom: 2px; }
+        .course { color: #ea580c; font-size: 10px; font-weight: 800; font-style: italic; margin-bottom: 6px; }
+        .row { display: flex; font-size: 9px; margin-bottom: 2px; border-bottom: 0.5px solid #f1f5f9; }
+        .lbl { font-weight: 800; width: 55px; color: #64748b; }
+        .val { font-weight: 700; color: #1e293b; text-transform: uppercase; }
+        .reg-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; margin: 0 10px 6px; padding: 4px 8px; display: flex; align-items: center; gap: 6px; }
+        .check { background: #22c55e; color: white; border-radius: 50%; width: 12px; height: 12px; display: flex; align-items: center; justify-content: center; font-size: 7px; }
+        .reg-txt { font-size: 8px; color: #166534; line-height: 1.1; }
+        .qr { position: absolute; right: 8px; bottom: 8px; width: 40px; height: 40px; border: 1px solid #e2e8f0; background: white; padding: 2px; }
+        .footer { background: #00051a; height: 6mm; color: white; display: flex; justify-content: center; align-items: center; font-size: 8px; font-weight: 700; letter-spacing: 0.5px; margin-top: auto; }
+    </style>
 </head>
-<body class="bg-slate-900 p-4">
+<body class="bg-slate-900 text-slate-800">
 
-    <div class="no-print max-w-6xl mx-auto mb-10 bg-white p-6 rounded-2xl shadow-2xl">
-        <div class="flex flex-wrap justify-between items-center gap-4 border-b pb-4 mb-6">
-            <div>
-                <h1 class="text-2xl font-black text-blue-900 italic">SNT PRINT HUB</h1>
-                <p class="text-xs text-gray-500 font-bold">Admin Panel - Database Management</p>
-            </div>
+    <div class="no-print max-w-5xl mx-auto my-6 bg-white p-5 rounded-xl shadow-xl">
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
+            <h2 class="text-xl font-black text-blue-900 italic">SNT ADMIN HUB</h2>
             <div class="flex gap-2">
-                <input type="number" id="startNum" placeholder="Start" class="border p-2 w-20 rounded-lg text-center" value="1">
-                <input type="number" id="endNum" placeholder="End" class="border p-2 w-20 rounded-lg text-center" value="10">
-                <button onclick="preparePrint()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold transition-all">Prepare Cards</button>
-                <button onclick="window.print()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-bold transition-all">Print Now</button>
+                <input type="number" id="startNum" value="1" class="border rounded p-1 w-16 text-center text-sm">
+                <input type="number" id="endNum" value="10" class="border rounded p-1 w-16 text-center text-sm">
+                <button onclick="window.preparePrint()" class="bg-blue-600 text-white px-4 py-1 rounded font-bold text-sm">Load Cards</button>
+                <button onclick="window.print()" class="bg-green-600 text-white px-4 py-1 rounded font-bold text-sm">Print</button>
             </div>
         </div>
-        
-        <div class="overflow-hidden rounded-xl border border-gray-200">
-            <table class="w-full text-sm text-left">
-                <thead class="bg-gray-50 text-gray-700 uppercase font-bold text-xs">
-                    <tr>
-                        <th class="p-4 border-b">#</th>
-                        <th class="p-4 border-b text-center">Photo</th>
-                        <th class="p-4 border-b">Name</th>
-                        <th class="p-4 border-b">Roll No</th>
-                        <th class="p-4 border-b">Course</th>
-                        <th class="p-4 border-b text-center">Action</th>
-                    </tr>
+        <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left">
+                <thead class="bg-slate-100 uppercase">
+                    <tr><th class="p-2">Name</th><th class="p-2">Roll No</th><th class="p-2">Course</th><th class="p-2">Action</th></tr>
                 </thead>
-                <tbody id="studentTable" class="divide-y divide-gray-100 italic">
-                    </tbody>
+                <tbody id="studentTable"></tbody>
             </table>
         </div>
     </div>
 
-    <div id="printArea" class="a4-page bg-white mx-auto min-h-[297mm] shadow-inner flex flex-wrap content-start">
-        <div class="no-print w-full flex flex-col items-center justify-center py-24 opacity-30">
-            <div class="text-6xl mb-4">🖨️</div>
-            <p class="text-xl font-black uppercase tracking-widest">Cards Preview Section</p>
-        </div>
-    </div>
+    <div id="printArea" class="a4-page bg-white mx-auto min-h-screen flex flex-wrap content-start"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
         import { getDatabase, ref, get, remove } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
 
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDXSZ4T5Yma9Wd28v_GN0zEV4g34SsXmVc",
             authDomain: "id-card-48ec8.firebaseapp.com",
@@ -144,120 +69,61 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        let studentsList = [];
+        let list = [];
 
-        // Load Table Data
-        async function loadTable() {
-            const table = document.getElementById('studentTable');
-            table.innerHTML = "<tr><td colspan='6' class='p-10 text-center font-bold text-blue-500'>Loading data from Firebase...</td></tr>";
-            
+        async function load() {
             const snap = await get(ref(db, 'students'));
-            table.innerHTML = "";
-            studentsList = [];
-
-            if(snap.exists()){
-                let i = 1;
-                snap.forEach(child => {
-                    const s = child.val();
-                    studentsList.push(s);
-                    table.innerHTML += `
-                        <tr class="hover:bg-blue-50 transition-colors">
-                            <td class="p-4 font-bold text-gray-400">${i}</td>
-                            <td class="p-4 flex justify-center"><img src="${s.photo}" class="w-10 h-10 rounded-full border-2 border-blue-200 object-cover"></td>
-                            <td class="p-4 font-bold text-blue-900 uppercase">${s.name}</td>
-                            <td class="p-4 font-mono">${s.rollNo}</td>
-                            <td class="p-4 text-orange-600 font-bold">${s.course}</td>
-                            <td class="p-4 text-center">
-                                <button onclick="deleteRecord('${child.key}')" class="bg-red-100 text-red-600 px-3 py-1 rounded-md text-xs font-black hover:bg-red-600 hover:text-white transition-all">DELETE</button>
-                            </td>
-                        </tr>
-                    `;
-                    i++;
+            const table = document.getElementById('studentTable');
+            table.innerHTML = ""; list = [];
+            if(snap.exists()) {
+                snap.forEach(c => {
+                    const s = c.val(); s.key = c.key; list.push(s);
+                    table.innerHTML += `<tr class="border-b">
+                        <td class="p-2 font-bold">${s.name}</td>
+                        <td class="p-2">${s.rollNo}</td>
+                        <td class="p-2">${s.course}</td>
+                        <td class="p-2"><button onclick="window.del('${s.key}')" class="text-red-500 font-bold underline">Del</button></td>
+                    </tr>`;
                 });
-            } else {
-                table.innerHTML = "<tr><td colspan='6' class='p-10 text-center text-gray-400'>No students found in database.</td></tr>";
             }
         }
 
-        // Prepare Printable Cards
         window.preparePrint = () => {
-            const start = parseInt(document.getElementById('startNum').value) - 1;
+            const start = parseInt(document.getElementById('startNum').value)-1;
             const end = parseInt(document.getElementById('endNum').value);
             const area = document.getElementById('printArea');
-            
-            if(studentsList.length === 0) { alert("Data empty!"); return; }
-
-            const selected = studentsList.slice(start, end);
             area.innerHTML = "";
-
-            selected.forEach(s => {
-                // Image layout matching logic
-                // preparePrint ke andar ye template use karein
-area.innerHTML += `
-    <div class="id-card-print">
-        <div class="header-blue">
-            <div class="logo-container">
-                <img src="Logo (1).jpg" class="h-full">
-            </div>
-            <div class="header-text">
-                <h1>SNT COMPUTER INSTITUTE</h1>
-                <p>Ayodhya, Uttar Pradesh</p>
-            </div>
-            <div class="verified-badge">VERIFIED ✓</div>
-        </div>
-
-        <div class="details-area">
-            <div class="photo-frame">
-                <img src="${s.photo}" class="w-full h-full object-cover">
-            </div>
-            
-            <div class="info-content">
-                <h2 class="student-name">${s.name}</h2>
-                <p class="course-label">${s.course}</p>
-                
-                <div class="data-table">
-                    <div class="data-item"><span class="data-label">ROLL NO:</span> <span class="data-val">${s.rollNo}</span></div>
-                    <div class="data-item"><span class="data-label">FATHER:</span> <span class="data-val">${s.fatherName}</span></div>
-                    <div class="data-item"><span class="data-label">D.O.B:</span> <span class="data-val">${s.dob}</span></div>
-                </div>
-                
-                <div class="addr-box">
-                    <span class="addr-label">ADDRESS:</span>
-                    <span class="addr-text uppercase">${s.address}</span>
-                </div>
-            </div>
-            
-            <div class="qr-container">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(s.verifyURL)}" class="w-12 h-12 border p-0.5 bg-white">
-            </div>
-        </div>
-
-        <div class="reg-status">
-            <div class="check-icon">✓</div>
-            <p class="reg-text">
-                This student is officially registered with <b>SNT Super Net Technologies Pvt. Ltd.</b><br>
-                ISO 9001:2015 Certified.
-            </p>
-        </div>
-
-        <div class="footer-strip">Quality Education & Digital Transparency</div>
-    </div>
-`;
-
+            list.slice(start, end).forEach(s => {
+                area.innerHTML += `
+                <div class="id-card-print">
+                    <div class="header-blue">
+                        <div class="logo-box"><img src="Logo (1).jpg" class="h-full"></div>
+                        <div class="header-text"><h1>SNT COMPUTER INSTITUTE</h1><p>Ayodhya, Uttar Pradesh</p></div>
+                        <div class="verified">VERIFIED ✓</div>
+                    </div>
+                    <div class="details">
+                        <img src="${s.photo}" class="photo">
+                        <div class="info">
+                            <h2 class="name">${s.name}</h2>
+                            <p class="course">${s.course}</p>
+                            <div class="row"><span class="lbl">ROLL NO:</span><span class="val">${s.rollNo}</span></div>
+                            <div class="row"><span class="lbl">FATHER:</span><span class="val">${s.fatherName}</span></div>
+                            <div class="row"><span class="lbl">D.O.B:</span><span class="val">${s.dob}</span></div>
+                            <div class="mt-1"><span class="text-[7px] font-bold block text-slate-400">ADDRESS:</span><span class="text-[8px] italic leading-none">${s.address}</span></div>
+                        </div>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(s.verifyURL)}" class="qr">
+                    </div>
+                    <div class="reg-box">
+                        <div class="check">✓</div>
+                        <p class="reg-txt">This student is officially registered with <b>SNT Super Net Technologies Pvt. Ltd.</b><br>ISO 9001:2015 Certified.</p>
+                    </div>
+                    <div class="footer">Quality Education & Digital Transparency</div>
+                </div>`;
             });
         };
 
-        // Delete Record
-        window.deleteRecord = (key) => {
-            if(confirm("Are you sure you want to delete this record?")) {
-                remove(ref(db, 'students/' + key)).then(() => {
-                    loadTable();
-                });
-            }
-        };
-
-        // Initial Load
-        loadTable();
+        window.del = (k) => { if(confirm("Delete?")) remove(ref(db, 'students/'+k)).then(load); };
+        load();
     </script>
 </body>
 </html>
