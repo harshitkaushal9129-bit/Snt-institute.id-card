@@ -3,126 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SNT Admin - Control Panel & Print</title>
+    <title>SNT Admin - Print Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 1. Universal Styles for both screen and print */
+        /* Screen View Styles */
         .id-card-print {
-            font-family: Arial, sans-serif;
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            background: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 95mm; height: 60mm; background: white; border-radius: 12px;
+            overflow: hidden; position: relative; border: 1px solid #003366;
+            font-family: Arial, sans-serif; margin-bottom: 10px;
         }
-
-        /* 2. Style Adjustments for Print Mode */
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white; padding: 0; margin: 0; }
-            .a4-page {
-                width: 210mm;
-                padding: 10mm;
-                margin: 0;
-                display: grid;
-                grid-template-columns: 1fr 1fr; /* 2 cards per row */
-                gap: 10px; /* spacing between cards */
-                box-shadow: none;
-                height: auto;
-            }
-            .id-card-print {
-                width: 95mm; /* A4 width / 2 - some padding */
-                height: 60mm; /* Aspect ratio of typical ID */
-                border: 1px solid #ccc; /* Thinner border for cleaner print */
-                box-shadow: none;
-                margin: 0;
-                break-inside: avoid; /* Don't split card between pages */
-            }
-            /* Colors sometimes need forced rendering in print */
-            .id-card-print * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        }
-
-        /* 3. Helper styles for layout matching the image */
         .header-blue {
             background: linear-gradient(90deg, #003366, #004080);
-            height: 15mm;
-            display: flex;
-            align-items: center;
-            padding: 0 5mm;
+            height: 15mm; display: flex; align-items: center; padding: 0 10px;
         }
-        .institute-name { color: white; font-weight: bold; font-size: 11pt; margin-left: 3mm; }
-        .details-area { padding: 3mm 5mm; display: flex; gap: 4mm; }
+        .details-area { display: flex; padding: 10px; gap: 10px; }
         .photo-frame {
-            border: 1.5px solid #003366;
-            border-radius: 6px;
-            width: 32mm;
-            height: 38mm;
-            overflow: hidden;
-            background-color: #f8fafc;
+            width: 32mm; height: 38mm; border: 2px solid #003366;
+            border-radius: 8px; overflow: hidden; background: #f0f4f8;
         }
-        .data-list { font-size: 9pt; flex: 1; margin-top: 1mm; }
-        .data-list p { border-bottom: 0.5px solid #eaeaea; padding: 0.5mm 0; display: flex; justify-content: space-between; }
-        .data-list b { color: #333; font-weight: bold; }
-        .student-name { font-weight: 900; color: #003366; text-transform: uppercase; font-size: 13pt; margin-bottom: 1mm; }
-        .course-name { font-weight: bold; color: #d35400; font-style: italic; font-size: 10pt; text-transform: uppercase; }
-        .qr-area { padding-left: 5mm; margin-top: -2mm; text-align: left; }
-        .full-qr-wrapper {
-            background: white;
-            padding: 3px;
-            border: 1px solid #ddd;
-            display: inline-block;
-            border-radius: 4px;
+        .qr-wrapper {
+            position: absolute; bottom: 40px; left: 15px; background: white;
+            padding: 3px; border: 1px solid #ccc; border-radius: 4px;
         }
         .footer-dark {
-            background: #00051a;
-            height: 8mm;
-            color: white;
-            text-align: center;
-            font-size: 8pt;
-            font-weight: bold;
-            letter-spacing: 0.5pt;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
+            background: #00051a; height: 8mm; color: white; width: 100%;
+            position: absolute; bottom: 0; display: flex; justify-content: center;
+            align-items: center; font-size: 9px; font-weight: bold;
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; margin: 0; padding: 0; }
+            .a4-page {
+                display: grid; grid-template-columns: 1fr 1fr;
+                gap: 5mm; padding: 5mm; width: 210mm; box-shadow: none;
+            }
+            .id-card-print { border: 1px solid #003366; break-inside: avoid; }
+            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
     </style>
 </head>
-<body class="bg-gray-900 font-sans p-4">
+<body class="bg-gray-800 p-4">
 
-    <div class="no-print max-w-6xl mx-auto space-y-6">
-        <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-lg border-l-8 border-orange-500">
-            <h1 class="text-2xl font-black text-blue-900 uppercase">SNT Admin - Print Center</h1>
-            <div class="flex gap-4">
-                <input type="number" id="startNum" placeholder="Start #" class="border p-2 rounded w-28 text-black" min="1">
-                <input type="number" id="endNum" placeholder="End #" class="border p-2 rounded w-28 text-black" min="1">
-                <button onclick="preparePrint()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-800 transition">Prepare Print</button>
-                <button onclick="window.print()" class="bg-green-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-700 transition">Print A4 Sheet</button>
+    <div class="no-print max-w-5xl mx-auto mb-8 bg-white p-6 rounded-xl shadow-2xl">
+        <div class="flex flex-wrap justify-between items-center gap-4">
+            <h1 class="text-xl font-black text-blue-900">SNT PRINT HUB</h1>
+            <div class="flex gap-2">
+                <input type="number" id="startNum" placeholder="Start (1)" class="border p-2 w-24 rounded" value="1">
+                <input type="number" id="endNum" placeholder="End (10)" class="border p-2 w-24 rounded" value="10">
+                <button onclick="preparePrint()" class="bg-blue-600 text-white px-5 py-2 rounded font-bold hover:bg-blue-700">Prepare</button>
+                <button onclick="window.print()" class="bg-green-600 text-white px-5 py-2 rounded font-bold">Print Now</button>
             </div>
         </div>
-
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-            <table class="w-full text-left border-collapse">
-                <thead class="bg-blue-900 text-white">
+        
+        <div class="mt-6 overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-gray-100 uppercase">
                     <tr>
-                        <th class="p-3 border">#</th>
-                        <th class="p-3 border">Photo</th>
-                        <th class="p-3 border">Name</th>
-                        <th class="p-3 border">Roll No</th>
-                        <th class="p-3 border">Course</th>
-                        <th class="p-3 border no-print">Action</th>
+                        <th class="p-2 border">#</th>
+                        <th class="p-2 border">Photo</th>
+                        <th class="p-2 border">Name</th>
+                        <th class="p-2 border">Roll</th>
+                        <th class="p-2 border">Action</th>
                     </tr>
                 </thead>
-                <tbody id="studentTable" class="text-sm">
-                    </tbody>
+                <tbody id="studentTable"></tbody>
             </table>
         </div>
     </div>
 
-    <div id="printArea" class="a4-page bg-white mx-auto mt-10 shadow-2xl min-h-[297mm]">
-        </div>
+    <div id="printArea" class="a4-page bg-white mx-auto min-h-[297mm] shadow-inner">
+        <p class="no-print p-10 text-center text-gray-400 font-bold">Prepare par click karein cards yahan dikhenge...</p>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
@@ -140,32 +92,26 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        let allStudents = [];
+        let studentsList = [];
 
-        // Function: Load Database data into the table
         async function loadTable() {
             const snap = await get(ref(db, 'students'));
             const table = document.getElementById('studentTable');
             table.innerHTML = "";
-            allStudents = [];
+            studentsList = [];
 
             if(snap.exists()){
                 let i = 1;
-                // Since data in RTDB is often sorted by key, we can sort it here for predictable indexing
-                const sortedData = Object.values(snap.val()).sort((a,b) => a.rollNo.localeCompare(b.rollNo));
-                
-                sortedData.forEach(s => {
-                    allStudents.push(s);
+                snap.forEach(child => {
+                    const s = child.val();
+                    studentsList.push(s);
                     table.innerHTML += `
-                        <tr class="hover:bg-gray-100 border-b">
-                            <td class="p-3 font-bold text-gray-500">${i}</td>
-                            <td class="p-2"><img src="${s.photo}" class="h-10 w-10 rounded border object-cover"></td>
-                            <td class="p-3 font-bold">${s.name}</td>
-                            <td class="p-3">${s.rollNo}</td>
-                            <td class="p-3 text-orange-600 font-bold">${s.course}</td>
-                            <td class="p-3 no-print">
-                                <button onclick="deleteStudent('${s.rollNo}')" class="text-red-500 hover:underline">Delete</button>
-                            </td>
+                        <tr class="border-b">
+                            <td class="p-2 border font-bold">${i}</td>
+                            <td class="p-2 border"><img src="${s.photo}" class="w-8 h-8 rounded border object-cover"></td>
+                            <td class="p-2 border font-bold uppercase">${s.name}</td>
+                            <td class="p-2 border">${s.rollNo}</td>
+                            <td class="p-2 border text-red-600 cursor-pointer" onclick="deleteRecord('${s.rollNo}')">Delete</td>
                         </tr>
                     `;
                     i++;
@@ -173,80 +119,60 @@
             }
         }
 
-        // Function: Prepare the specific Cards for the A4 print layout based on Range
         window.preparePrint = () => {
-            const startVal = parseInt(document.getElementById('startNum').value);
-            const endVal = parseInt(document.getElementById('endNum').value);
-            const start = startVal - 1; // Convert to 0-based index
-            const end = endVal - 1;
+            const start = parseInt(document.getElementById('startNum').value) - 1;
+            const end = parseInt(document.getElementById('endNum').value);
             const area = document.getElementById('printArea');
-            area.innerHTML = "";
-
-            if(isNaN(start) || isNaN(end) || start < 0 || end < start || end >= allStudents.length) {
-                alert("Please enter a valid start number, and ensure the range is correct.");
+            
+            if(studentsList.length === 0) {
+                alert("Data abhi load ho raha hai, thoda intezar karein.");
                 return;
             }
 
-            const selected = allStudents.slice(start, end + 1);
+            const selected = studentsList.slice(start, end);
+            if(selected.length === 0) {
+                alert("Iss range mein koi data nahi mila!");
+                return;
+            }
+
+            area.innerHTML = "";
             selected.forEach(s => {
-                const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(s.verifyURL)}`;
                 area.innerHTML += `
                     <div class="id-card-print">
                         <div class="header-blue">
-                            <img src="Logo (1).jpg" alt="Logo" style="height: 10mm; background: white; padding: 1mm; border-radius: 4px;">
-                            <span class="institute-name">SNT COMPUTER INSTITUTE</span>
+                            <img src="Logo (1).jpg" class="h-10 bg-white p-1 rounded">
+                            <div class="ml-2 text-white font-bold text-xs uppercase">SNT COMPUTER INSTITUTE</div>
                         </div>
-                        
                         <div class="details-area">
                             <div class="photo-frame">
-                                <img src="${s.photo}" style="width: 100%; height: 100%; object-cover: cover;">
+                                <img src="${s.photo}" class="w-full h-full object-cover">
                             </div>
-                            
-                            <div class="data-list">
-                                <h2 class="student-name truncate">${s.name}</h2>
-                                <p class="course-name">${s.course}</p>
-                                
-                                <div style="margin-top: 3mm; space-y-1.5mm;">
-                                    <p><b>ROLL:</b> <span>${s.rollNo}</span></p>
-                                    <p><b>FATHER:</b> <span>${s.fatherName}</span></p>
-                                    <p><b>D.O.B:</b> <span>${s.dob}</span></p>
-                                    <div>
-                                        <b>ADDRESS:</b>
-                                        <span style="font-size: 8pt; color: #555; display: block; line-height: 1.1; margin-top: 0.5mm;">${s.address}</span>
-                                    </div>
+                            <div class="flex-1">
+                                <h2 class="text-blue-900 font-black text-sm uppercase leading-tight">${s.name}</h2>
+                                <p class="text-orange-600 text-[10px] font-bold italic border-b mb-1 uppercase">${s.course}</p>
+                                <div class="text-[9px] space-y-1">
+                                    <p><b>ROLL:</b> ${s.rollNo}</p>
+                                    <p><b>FATHER:</b> ${s.fatherName}</p>
+                                    <p><b>D.O.B:</b> ${s.dob}</p>
+                                    <p class="text-[8px] leading-tight mt-1"><b>ADDR:</b> ${s.address}</p>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="qr-area no-print">
-                            <div class="full-qr-wrapper shadow-sm">
-                                <img src="${qrApi}" style="width: 15mm; height: 15mm;">
-                            </div>
+                        <div class="qr-wrapper shadow-sm">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(s.verifyURL)}" class="w-14 h-14">
                         </div>
-                        
-                        <div class="qr-area print-only" style="margin-top: -12mm;">
-                             <div class="full-qr-wrapper shadow-sm">
-                                <img src="${qrApi}" style="width: 18mm; height: 18mm;">
-                            </div>
-                        </div>
-                        
-                        <div class="footer-dark">
-                            QUALITY EDUCATION & DIGITAL VERIFICATION
-                        </div>
+                        <div class="footer-dark uppercase">Quality Education & Digital Verification</div>
                     </div>
                 `;
             });
-            alert(`${selected.length} ID Cards prepared! Check the preview below the table, and press Print A4 Sheet.`);
         };
 
-        // Function: Delete student data from database
-        window.deleteStudent = (id) => {
-            if(confirm(`Are you sure you want to delete student with Roll No: ${id}?`)) {
+        window.deleteRecord = (id) => {
+            if(confirm("Delete student?")) {
                 remove(ref(db, 'students/' + id)).then(() => loadTable());
             }
         };
 
-        // Initial Load
         loadTable();
     </script>
 </body>
