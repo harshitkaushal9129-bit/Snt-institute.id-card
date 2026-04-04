@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SNT ID Generator | Dashboard</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="manifest" href="manifest.json">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SNT ID">
-<link rel="apple-touch-icon" href="Logo (1).jpg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SNT ID">
+    <link rel="apple-touch-icon" href="Logo (1).jpg">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -16,39 +19,76 @@
         .header-blue { background: linear-gradient(90deg, #003366, #004080); height: 65px; display: flex; justify-content: center; align-items: center; padding: 0 15px; }
         .footer-dark { background: #00051a; height: 35px; position: absolute; bottom: 0; width: 100%; text-align: center; color: white; display: flex; flex-direction: column; justify-content: center; }
         .qr-box { background: white; padding: 2px; border: 1px solid #eee; }
+        
+        /* Input Icon Wrapper */
+        .input-icon-box { position: relative; }
+        .input-icon-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.9rem; }
+        .input-icon-box input, .input-icon-box select { padding-left: 35px !important; }
     </style>
 </head>
 <body class="bg-gray-100 p-5 font-sans">
 
     <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-orange-500">
-            <h2 class="text-2xl font-bold mb-4 text-blue-900 border-b pb-2">Student Registration</h2>
+            <div class="flex items-center gap-2 mb-4 border-b pb-2">
+                <i class="fas fa-user-graduate text-blue-900 text-xl"></i>
+                <h2 class="text-2xl font-bold text-blue-900">Student Registration</h2>
+            </div>
+            
             <form id="idForm" class="space-y-3">
-                <input type="text" id="name" placeholder="Full Name" class="w-full p-2 border rounded uppercase" required>
-                <div class="grid grid-cols-2 gap-2">
-                    <input type="text" id="rollNo" placeholder="Roll No (e.g. SNT-101)" class="p-2 border rounded" required>
-                    <input type="text" id="course" placeholder="Course (O Level, CCC)" class="p-2 border rounded" required>
+                <div class="input-icon-box">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="name" placeholder="Full Name" class="w-full p-2 border rounded uppercase outline-blue-500" required>
                 </div>
-                <input type="text" id="fatherName" placeholder="Father's Name" class="w-full p-2 border rounded">
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="input-icon-box">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="rollNo" placeholder="Roll No (SNT-101)" class="w-full p-2 border rounded outline-blue-500" required>
+                    </div>
+                    <div class="input-icon-box">
+                        <i class="fas fa-book"></i>
+                        <input type="text" id="course" placeholder="Course (CCC, O Level)" class="w-full p-2 border rounded outline-blue-500" required>
+                    </div>
+                </div>
+
+                <div class="input-icon-box">
+                    <i class="fas fa-users"></i>
+                    <input type="text" id="fatherName" placeholder="Father's Name" class="w-full p-2 border rounded outline-blue-500">
+                </div>
                 
                 <div class="grid grid-cols-3 gap-2">
-                    <select id="dobDay" class="p-2 border rounded"></select>
-                    <select id="dobMonth" class="p-2 border rounded">
+                    <div class="input-icon-box">
+                        <i class="fas fa-calendar-alt"></i>
+                        <select id="dobDay" class="w-full p-2 border rounded outline-none"></select>
+                    </div>
+                    <select id="dobMonth" class="p-2 border rounded outline-none">
                         <option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option>
                         <option value="04">Apr</option><option value="05">May</option><option value="06">Jun</option>
                         <option value="07">Jul</option><option value="08">Aug</option><option value="09">Sep</option>
                         <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
                     </select>
-                    <select id="dobYear" class="p-2 border rounded"></select>
+                    <select id="dobYear" class="p-2 border rounded outline-none"></select>
                 </div>
                 
-                <input type="text" id="contact" placeholder="Contact Number" class="w-full p-2 border rounded">
-                <input type="text" id="address" placeholder="Address" class="w-full p-2 border rounded">
+                <div class="input-icon-box">
+                    <i class="fas fa-phone-alt"></i>
+                    <input type="text" id="contact" placeholder="Contact Number" class="w-full p-2 border rounded outline-blue-500">
+                </div>
+
+                <div class="input-icon-box">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" id="address" placeholder="Address" class="w-full p-2 border rounded outline-blue-500">
+                </div>
                 
-                <label class="block text-sm font-bold text-gray-700">Student Photo:</label>
-                <input type="file" id="photoInput" accept="image/*" class="w-full p-1 border rounded" required>
+                <label class="block text-sm font-bold text-gray-700 mt-2">
+                    <i class="fas fa-camera mr-1"></i> Student Photo:
+                </label>
+                <input type="file" id="photoInput" accept="image/*" class="w-full p-1 border rounded bg-gray-50 cursor-pointer" required>
                 
-                <button type="submit" id="saveBtn" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition uppercase">Generate & Save to DB</button>
+                <button type="submit" id="saveBtn" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition uppercase shadow-lg flex items-center justify-center gap-2">
+                    <i class="fas fa-save"></i> Generate & Save to DB
+                </button>
             </form>
         </div>
 
@@ -88,7 +128,9 @@
                     <p class="text-[10px] font-bold tracking-widest uppercase">Quality Education & Digital Verification</p>
                 </div>
             </div>
-            <a href="admin.html" class="bg-slate-800 text-white px-6 py-2 rounded-full font-bold hover:bg-black transition">Go to Admin Print Panel →</a>
+            <a href="admin.html" class="bg-slate-800 text-white px-6 py-2 rounded-full font-bold hover:bg-black transition flex items-center gap-2">
+                <i class="fas fa-print"></i> Go to Admin Print Panel →
+            </a>
         </div>
     </div>
 
@@ -109,12 +151,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Populate Dates
         const d = document.getElementById('dobDay'), y = document.getElementById('dobYear');
         for(let i=1; i<=31; i++) d.innerHTML += `<option value="${i<10?'0'+i:i}">${i}</option>`;
         for(let i=new Date().getFullYear(); i>=1990; i--) y.innerHTML += `<option value="${i}">${i}</option>`;
 
-        // Helper: Convert Image to Base64
         const toBase64 = file => new Promise((res, rej) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -126,7 +166,7 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('saveBtn');
-            btn.innerText = "Saving Data...";
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Saving Data...`;
             btn.disabled = true;
             
             const file = document.getElementById('photoInput').files[0];
@@ -148,10 +188,9 @@
             set(ref(db, 'students/' + roll), data)
                 .then(() => {
                     alert("Record Saved Successfully!");
-                    btn.innerText = "Generate & Save to DB";
+                    btn.innerHTML = `<i class="fas fa-save"></i> Generate & Save to DB`;
                     btn.disabled = false;
                     
-                    // Update Preview UI
                     document.getElementById('prevName').innerText = data.name;
                     document.getElementById('prevRoll').innerText = data.rollNo;
                     document.getElementById('prevFather').innerText = data.fatherName;
@@ -160,28 +199,25 @@
                     document.getElementById('prevAddress').innerText = data.address;
                     document.getElementById('prevImg').src = data.photo;
                     
-                    // Generate Clear QR Code
                     const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(data.verifyURL)}`;
                     document.getElementById('prevQR').src = qrApi;
                 })
                 .catch(err => {
                     alert("Error: " + err.message);
                     btn.disabled = false;
-                    btn.innerText = "Generate & Save to DB";
+                    btn.innerHTML = `<i class="fas fa-save"></i> Generate & Save to DB`;
                 });
         });
     </script>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('Service Worker Registered'))
-        .catch(err => console.log('Service Worker Failed', err));
-    });
-  }
-</script>
-
-    
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Service Worker Registered'))
+            .catch(err => console.log('Service Worker Failed', err));
+        });
+    }
+    </script>
 </body>
 </html>
