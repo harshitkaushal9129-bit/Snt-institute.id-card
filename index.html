@@ -16,11 +16,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-.border-bottom { border-bottom: 1px solid rgba(255,255,255,0.05); }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        .border-bottom { border-bottom: 1px solid rgba(255,255,255,0.05); }
 
         .id-card { width: 450px; height: 280px; background: white; border-radius: 15px; overflow: hidden; position: relative; border: 1px solid #ddd; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .header-blue { background: linear-gradient(90deg, #003366, #004080); height: 65px; display: flex; justify-content: center; align-items: center; padding: 0 15px; }
@@ -31,12 +31,46 @@
         .input-icon-box { position: relative; }
         .input-icon-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.9rem; }
         .input-icon-box input, .input-icon-box select { padding-left: 35px !important; }
+
+        /* Custom Scrollbar for App Feel */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #003366; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-gray-100 p-5 font-sans">
-<div class="fixed top-5 right-5 z-50">
-    <button onclick="openInfo()" class="w-12 h-12 rounded-full bg-blue-900 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-        <i class="fas fa-info-circle text-xl"></i>
+<body class="bg-gray-100 p-5 font-sans pt-20">
+
+<nav class="fixed top-0 left-0 right-0 bg-blue-900 text-white p-3 flex justify-between items-center shadow-2xl z-[40] px-6 border-b border-orange-500">
+    <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-white p-1 overflow-hidden border-2 border-orange-500 shadow-lg">
+            <img src="Logo (1).jpg" alt="Logo" class="w-full h-full object-contain">
+        </div>
+        <div>
+            <h1 class="text-sm font-black tracking-tighter leading-none">SNT COMPUTER INSTITUTE</h1>
+            <p class="text-[10px] text-orange-400 font-bold uppercase">Official Portal v3.0.1</p>
+        </div>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="hidden md:block text-right mr-2 border-r border-white/20 pr-4">
+            <p id="live-clock" class="text-[10px] font-bold uppercase"></p>
+        </div>
+        <div class="relative cursor-pointer hover:scale-110 transition">
+            <i class="fas fa-bell text-xl"></i>
+            <span class="absolute -top-1 -right-1 bg-red-500 text-[8px] rounded-full w-4 h-4 flex items-center justify-center border border-white">2</span>
+        </div>
+    </div>
+</nav>
+
+<div class="max-w-6xl mx-auto mb-10 text-center animate-fade-in pt-4">
+    <div class="inline-block p-4 bg-white rounded-full shadow-2xl border-4 border-orange-500 mb-4 ring-8 ring-blue-900/10 transition-transform hover:scale-105">
+        <img src="Logo (1).jpg" alt="SNT Logo" class="h-20 w-20 object-contain rounded-full">
+    </div>
+    <h2 class="text-4xl font-black text-blue-900 tracking-tighter uppercase">Student Management <span class="text-orange-500">Dashboard</span></h2>
+    <div class="h-1 w-24 bg-orange-500 mx-auto mt-2 rounded-full"></div>
+</div>
+
+<div class="fixed bottom-6 right-6 z-50">
+    <button onclick="openInfo()" class="w-16 h-16 rounded-full bg-blue-900 text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-transform border-4 border-white active:scale-90">
+        <i class="fas fa-grid-2 text-2xl"><i class="fas fa-info-circle"></i></i>
     </button>
 </div>
 
@@ -261,25 +295,31 @@
                 });
         });
 
-                        window.openInfo = async () => {
-    document.getElementById('info-modal').style.display = "flex";
-    if (navigator.getBattery) {
-        const b = await navigator.getBattery();
-        document.getElementById('info-battery').innerText = Math.round(b.level * 100) + "%";
-    }
-};
+        // LIVE DATE SCRIPT
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('live-clock').innerText = now.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' });
+        }, 1000);
 
-window.closeInfo = () => {
-    document.getElementById('info-modal').style.display = "none";
-};
+        window.openInfo = async () => {
+            document.getElementById('info-modal').style.display = "flex";
+            if (navigator.getBattery) {
+                const b = await navigator.getBattery();
+                document.getElementById('info-battery').innerText = Math.round(b.level * 100) + "%";
+            }
+        };
 
-window.openSupportQR = () => {
-    document.getElementById('support-qr-modal').style.display = "flex";
-};
+        window.closeInfo = () => {
+            document.getElementById('info-modal').style.display = "none";
+        };
 
-window.closeSupportQR = () => {
-    document.getElementById('support-qr-modal').style.display = "none";
-};
+        window.openSupportQR = () => {
+            document.getElementById('support-qr-modal').style.display = "flex";
+        };
+
+        window.closeSupportQR = () => {
+            document.getElementById('support-qr-modal').style.display = "none";
+        };
 
     </script>
 
