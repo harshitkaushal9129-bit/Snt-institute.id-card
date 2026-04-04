@@ -15,6 +15,13 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+.border-bottom { border-bottom: 1px solid rgba(255,255,255,0.05); }
+
         .id-card { width: 450px; height: 280px; background: white; border-radius: 15px; overflow: hidden; position: relative; border: 1px solid #ddd; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .header-blue { background: linear-gradient(90deg, #003366, #004080); height: 65px; display: flex; justify-content: center; align-items: center; padding: 0 15px; }
         .footer-dark { background: #00051a; height: 35px; position: absolute; bottom: 0; width: 100%; text-align: center; color: white; display: flex; flex-direction: column; justify-content: center; }
@@ -27,6 +34,51 @@
     </style>
 </head>
 <body class="bg-gray-100 p-5 font-sans">
+<div class="fixed top-5 right-5 z-50">
+    <button onclick="openInfo()" class="w-12 h-12 rounded-full bg-blue-900 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+        <i class="fas fa-info-circle text-xl"></i>
+    </button>
+</div>
+
+<div id="info-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[1000] hidden items-center justify-center p-4">
+    <div class="bg-[#0f172a] p-8 rounded-[40px] w-full max-w-[350px] border border-white/10 shadow-2xl relative text-white animate-fade-in">
+        <h2 class="text-2xl font-black text-center mb-8 uppercase tracking-widest">System Info</h2>
+        
+        <div class="space-y-1">
+            <div class="flex justify-between items-center py-3 border-bottom border-white/5">
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Battery</span>
+                <span id="info-battery" class="text-xs font-bold">100%</span>
+            </div>
+            <div class="flex justify-between items-center py-3 border-bottom border-white/5">
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Version</span>
+                <span class="text-xs font-bold">3.0.1 Build</span>
+            </div>
+            <div class="flex justify-between items-center py-3 border-bottom border-white/5">
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Developer</span>
+                <span class="text-xs font-bold text-sky-400">Harshit Kaushal</span>
+            </div>
+            
+            <div class="flex justify-around pt-6 pb-4">
+                <a href="https://www.instagram.com/invites/contact/?igsh=vucokp5w5lf4&utm_content=gji134o" target="_blank" class="text-pink-500 text-2xl hover:scale-120 transition"><i class="fab fa-instagram"></i></a>
+                <a href="https://youtube.com/@programmingby-kaushalji?si=OuViX3t9PwjNHUMB" target="_blank" class="text-red-500 text-2xl hover:scale-120 transition"><i class="fab fa-youtube"></i></a>
+                <a href="https://wa.me/919129191898" target="_blank" class="text-green-500 text-2xl hover:scale-120 transition"><i class="fab fa-whatsapp"></i></a>
+                <i onclick="openSupportQR()" class="fas fa-qrcode text-sky-400 text-2xl cursor-pointer hover:scale-120 transition"></i>
+            </div>
+        </div>
+
+        <button onclick="closeInfo()" class="w-full mt-6 bg-slate-800/50 text-slate-400 p-4 rounded-2xl font-black text-[11px] uppercase tracking-widest border border-white/5 active:scale-95 transition-all">Close Panel</button>
+    </div>
+</div>
+
+<div id="support-qr-modal" class="fixed inset-0 bg-black/90 z-[1100] hidden items-center justify-center p-4" onclick="closeSupportQR()">
+    <div class="bg-white p-6 rounded-[30px] text-center w-full max-w-[300px]" onclick="event.stopPropagation()">
+        <h3 class="text-slate-900 font-black text-xs uppercase tracking-widest mb-4">Scan to Support</h3>
+        <div class="bg-slate-100 p-4 rounded-2xl mb-4">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=mandavikaushal913@okaxis&pn=Harshit%20Kaushal&cu=INR" class="mx-auto w-40 h-40">
+        </div>
+        <p class="text-[10px] font-bold text-sky-600 break-all">mandavikaushal913@okaxis</p>
+    </div>
+</div>
 
     <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-orange-500">
@@ -208,6 +260,27 @@
                     btn.innerHTML = `<i class="fas fa-save"></i> Generate & Save to DB`;
                 });
         });
+
+                        window.openInfo = async () => {
+    document.getElementById('info-modal').style.display = "flex";
+    if (navigator.getBattery) {
+        const b = await navigator.getBattery();
+        document.getElementById('info-battery').innerText = Math.round(b.level * 100) + "%";
+    }
+};
+
+window.closeInfo = () => {
+    document.getElementById('info-modal').style.display = "none";
+};
+
+window.openSupportQR = () => {
+    document.getElementById('support-qr-modal').style.display = "flex";
+};
+
+window.closeSupportQR = () => {
+    document.getElementById('support-qr-modal').style.display = "none";
+};
+
     </script>
 
     <script>
