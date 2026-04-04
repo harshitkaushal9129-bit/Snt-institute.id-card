@@ -353,10 +353,10 @@
         };
 
         window.shareApp = () => {
-            const appLink = "https://harshitkaushal9129-bit.github.io/Dashboard-of-snt/";
-            const text = "Official Portal - SNT Computer Institute. Click to open:";
+            const appLink = "https://harshitkaushal9129-bit.github.io/Snt-institute.id-card/";
+            const text = "Official Portal of SNT Id card - SNT Computer Institute. Click to open:";
             if (navigator.share) {
-                navigator.share({ title: 'SNT App', text: text, url: appLink });
+                navigator.share({ title: 'SNT id card App', text: text, url: appLink });
             } else {
                 window.open(`https://wa.me/?text=${encodeURIComponent(text + " " + appLink)}`);
             }
