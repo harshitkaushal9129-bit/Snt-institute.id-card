@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNT Notifications | Official Updates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #00051a; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .glass-bg { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+        .notif-card { background: rgba(30, 41, 59, 0.4); border-left: 4px solid #0ea5e9; transition: 0.3s; }
+        .notif-card:hover { transform: translateX(5px); background: rgba(30, 41, 59, 0.6); }
+        .gradient-text { background: linear-gradient(90deg, #0ea5e9, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-2xl mx-auto mb-10 flex items-center justify-between">
+        <button onclick="history.back()" class="bg-white/10 p-3 rounded-2xl hover:bg-white/20 transition">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <h1 class="text-2xl font-black tracking-tighter uppercase gradient-text">Notice Board</h1>
+        <div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center border border-orange-500/50">
+            <i class="fas fa-bullhorn text-orange-500"></i>
+        </div>
+    </div>
+
+    <div id="notif-container" class="max-w-2xl mx-auto space-y-4">
+        <div id="loader" class="text-center py-20">
+            <i class="fas fa-spinner fa-spin text-4xl text-sky-500 mb-4"></i>
+            <p class="text-slate-400 font-bold text-xs uppercase tracking-widest">Fetching Latest Updates...</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAOQtM_XYLqPgxMK1XBdfl0m7KoAseZRCA",
+            authDomain: "snt-computer-institute.firebaseapp.com",
+            projectId: "snt-computer-institute",
+            databaseURL: "https://snt-computer-institute-default-rtdb.firebaseio.com",
+            storageBucket: "snt-computer-institute.appspot.com",
+            appId: "1:117580784781:web:73ba19d2d008beb3a5eec4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const container = document.getElementById('notif-container');
+        const loader = document.getElementById('loader');
+
+        onValue(ref(db, 'notifications'), (snapshot) => {
+            loader.style.display = 'none';
+            container.innerHTML = '';
+            
+            if(snapshot.exists()){
+                const data = snapshot.val();
+                Object.entries(data).reverse().forEach(([key, notif]) => {
+                    const time = new Date(notif.timestamp).toLocaleDateString('en-GB', {
+                        day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
+                    });
+
+                    const card = document.createElement('div');
+                    card.className = "notif-card glass-bg p-5 rounded-2xl shadow-xl animate-fade-in";
+                    card.innerHTML = `
+                        <div class="flex gap-4">
+                            ${notif.imageUrl ? `<img src="${notif.imageUrl}" class="w-16 h-16 rounded-xl object-cover border border-white/10">` : 
+                            `<div class="w-16 h-16 rounded-xl bg-sky-500/10 flex items-center justify-center"><i class="fas fa-envelope-open text-sky-400"></i></div>`}
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="text-[10px] font-bold text-orange-500 uppercase tracking-tighter">SNT Official Notice</span>
+                                    <span class="text-[9px] text-slate-500 font-medium">${time}</span>
+                                </div>
+                                <p class="text-sm text-slate-200 leading-relaxed font-medium">${notif.message}</p>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } else {
+                container.innerHTML = `
+                    <div class="text-center py-20 glass-bg rounded-[40px]">
+                        <i class="fas fa-bell-slash text-4xl text-slate-700 mb-4"></i>
+                        <p class="text-slate-500 font-bold text-xs uppercase tracking-widest">No active notices found</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
