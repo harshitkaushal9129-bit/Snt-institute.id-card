@@ -378,5 +378,23 @@
         window.closeSupportQR = () => document.getElementById('support-qr-modal').style.display = "none";
 
     </script>
+        <script> // Service Worker Register karne ka code
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('SNT Service Worker Registered!', reg.scope))
+            .catch(err => console.log('Registration Failed:', err));
+    });
+}
+
+// Notification Permission maangne ka code
+if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+    Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+            console.log('Notification permission granted.');
+        }
+    });
+}
+</script>
 </body>
 </html>
