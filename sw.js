@@ -1,17 +1,22 @@
-const CACHE_NAME = 'snt-cache-v1';
-const urlsToCache = [
+const CACHE_NAME = 'snt-id-v1';
+const assets = [
   'index.html',
+  'Logo (1).jpg',
   'https://cdn.tailwindcss.com'
 ];
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(assets);
+    })
   );
 });
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(res => {
+      return res || fetch(e.request);
+    })
   );
 });
