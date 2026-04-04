@@ -247,154 +247,168 @@
         </div>
     </div>
 
-</div> <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+</div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDXSZ4T5Yma9Wd28v_GN0zEV4g34SsXmVc",
-            authDomain: "id-card-48ec8.firebaseapp.com",
-            databaseURL: "https://id-card-48ec8-default-rtdb.firebaseio.com",
-            projectId: "id-card-48ec8",
-            storageBucket: "id-card-48ec8.firebasestorage.app",
-            messagingSenderId: "314458314948",
-            appId: "1:314458314948:web:192021fe6cc760dafcd191"
-        };
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+    import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging.js";
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+    const firebaseConfig = {
+        apiKey: "AIzaSyDXSZ4T5Yma9Wd28v_GN0zEV4g34SsXmVc",
+        authDomain: "id-card-48ec8.firebaseapp.com",
+        databaseURL: "https://id-card-48ec8-default-rtdb.firebaseio.com",
+        projectId: "id-card-48ec8",
+        storageBucket: "id-card-48ec8.firebasestorage.app",
+        messagingSenderId: "314458314948",
+        appId: "1:314458314948:web:192021fe6cc760dafcd191"
+    };
 
-        const d = document.getElementById('dobDay'), y = document.getElementById('dobYear');
-        for(let i=1; i<=31; i++) d.innerHTML += `<option value="${i<10?'0'+i:i}">${i}</option>`;
-        for(let i=new Date().getFullYear(); i>=1990; i--) y.innerHTML += `<option value="${i}">${i}</option>`;
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const messaging = getMessaging(app);
 
-        const toBase64 = file => new Promise((res, rej) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => res(reader.result);
-            reader.onerror = e => rej(e);
-        });
-
-        const form = document.getElementById('idForm');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('saveBtn');
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Saving Data...`;
-            btn.disabled = true;
-            
-            const file = document.getElementById('photoInput').files[0];
-            const photoData = await toBase64(file);
-            const roll = document.getElementById('rollNo').value.toUpperCase();
-            
-            const data = {
-                name: document.getElementById('name').value.toUpperCase(),
-                rollNo: roll,
-                fatherName: document.getElementById('fatherName').value.toUpperCase(),
-                course: document.getElementById('course').value.toUpperCase(),
-                dob: `${d.value}/${document.getElementById('dobMonth').value}/${y.value}`,
-                contact: document.getElementById('contact').value,
-                address: document.getElementById('address').value,
-                photo: photoData,
-                verifyURL: `https://harshitkaushal9129-bit.github.io/Snt-institute.id-card/verify.html?id=${roll}`
-            };
-
-            set(ref(db, 'students/' + roll), data)
-                .then(() => {
-                    alert("Record Saved Successfully!");
-                    btn.innerHTML = `<i class="fas fa-save"></i> Generate & Save to DB`;
-                    btn.disabled = false;
-                    
-                    document.getElementById('prevName').innerText = data.name;
-                    document.getElementById('prevRoll').innerText = data.rollNo;
-                    document.getElementById('prevFather').innerText = data.fatherName;
-                    document.getElementById('prevCourse').innerText = data.course;
-                    document.getElementById('prevDob').innerText = data.dob;
-                    document.getElementById('prevAddress').innerText = data.address;
-                    document.getElementById('prevImg').src = data.photo;
-                    
-                    const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(data.verifyURL)}`;
-                    document.getElementById('prevQR').src = qrApi;
-                })
-                .catch(err => {
-                    alert("Error: " + err.message);
-                    btn.disabled = false;
-                    btn.innerHTML = `<i class="fas fa-save"></i> Generate & Save to DB`;
-                });
-        });
-
-        // LIVE DATE SCRIPT
-        setInterval(() => {
-            const now = new Date();
-            const clock = document.getElementById('live-clock');
-            if(clock) clock.innerText = now.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' });
-        }, 1000);
-
-        // PASSWORD LOGIC
-        window.checkPass = () => {
-            const pin = document.getElementById('passInput').value;
-            if(pin === "912919") {
-                document.getElementById('lock-screen').style.display = "none";
-                document.getElementById('dashboard-content').style.display = "block";
-            } else {
-                alert("Incorrect PIN! Access Denied.");
-                document.getElementById('passInput').value = "";
-            }
-        };
-
-        // SHARE FUNCTIONS
-        window.shareID = () => {
-            const name = document.getElementById('prevName').innerText;
-            const roll = document.getElementById('prevRoll').innerText;
-            const verify = `https://harshitkaushal9129-bit.github.io/Snt-institute.id-card/verify.html?id=${roll}`;
-            const text = `SNT Student ID Details:\nName: ${name}\nRoll: ${roll}\nVerify: ${verify}`;
-            if (navigator.share) {
-                navigator.share({ title: 'Student ID', text: text, url: verify });
-            } else {
-                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
-            }
-        };
-
-        window.shareApp = () => {
-            const appLink = "https://harshitkaushal9129-bit.github.io/Snt-institute.id-card/";
-            const text = "Official Portal of SNT Id card - SNT Computer Institute. Click to open:";
-            if (navigator.share) {
-                navigator.share({ title: 'SNT id card App', text: text, url: appLink });
-            } else {
-                window.open(`https://wa.me/?text=${encodeURIComponent(text + " " + appLink)}`);
-            }
-        };
-
-        window.openInfo = async () => {
-            document.getElementById('info-modal').style.display = "flex";
-            if (navigator.getBattery) {
-                const b = await navigator.getBattery();
-                const batLabel = document.getElementById('info-battery');
-                if(batLabel) batLabel.innerText = Math.round(b.level * 100) + "%";
-            }
-        };
-
-        window.closeInfo = () => document.getElementById('info-modal').style.display = "none";
-        window.openSupportQR = () => document.getElementById('support-qr-modal').style.display = "flex";
-        window.closeSupportQR = () => document.getElementById('support-qr-modal').style.display = "none";
-
-    </script>
-        <script> // Service Worker Register karne ka code
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('SNT Service Worker Registered!', reg.scope))
-            .catch(err => console.log('Registration Failed:', err));
-    });
-}
-
-// Notification Permission maangne ka code
-if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-    Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-            console.log('Notification permission granted.');
+    // Get Device Token for Notifications
+    getToken(messaging, { vapidKey: 'BPEv_Ap76-qXpE_6Qz7e0k...' }).then((currentToken) => {
+        if (currentToken) {
+            console.log("Device Token: ", currentToken);
         }
+    }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
     });
-}
+
+    const d = document.getElementById('dobDay'), y = document.getElementById('dobYear');
+    for(let i=1; i<=31; i++) d.innerHTML += `<option value="${i<10?'0'+i:i}">${i}</option>`;
+    for(let i=new Date().getFullYear(); i>=1990; i--) y.innerHTML += `<option value="${i}">${i}</option>`;
+
+    const toBase64 = file => new Promise((res, rej) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => res(reader.result);
+        reader.onerror = e => rej(e);
+    });
+
+    const form = document.getElementById('idForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('saveBtn');
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Saving Data...`;
+        btn.disabled = true;
+        
+        const file = document.getElementById('photoInput').files[0];
+        const photoData = await toBase64(file);
+        const roll = document.getElementById('rollNo').value.toUpperCase();
+        
+        const data = {
+            name: document.getElementById('name').value.toUpperCase(),
+            rollNo: roll,
+            fatherName: document.getElementById('fatherName').value.toUpperCase(),
+            course: document.getElementById('course').value.toUpperCase(),
+            dob: `${d.value}/${document.getElementById('dobMonth').value}/${y.value}`,
+            contact: document.getElementById('contact').value,
+            address: document.getElementById('address').value,
+            photo: photoData,
+            verifyURL: `https://harshitkaushal9129-bit.github.io/Snt-institute.id-card/verify.html?id=${roll}`
+        };
+
+        set(ref(db, 'students/' + roll), data)
+            .then(() => {
+                alert("Record Saved Successfully!");
+                btn.innerHTML = `<i class="fas fa-save"></i> Generate & Save to DB`;
+                btn.disabled = false;
+                
+                document.getElementById('prevName').innerText = data.name;
+                document.getElementById('prevRoll').innerText = data.rollNo;
+                document.getElementById('prevFather').innerText = data.fatherName;
+                document.getElementById('prevCourse').innerText = data.course;
+                document.getElementById('prevDob').innerText = data.dob;
+                document.getElementById('prevAddress').innerText = data.address;
+                document.getElementById('prevImg').src = data.photo;
+                
+                const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(data.verifyURL)}`;
+                document.getElementById('prevQR').src = qrApi;
+            })
+            .catch(err => {
+                alert("Error: " + err.message);
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fas fa-save"></i> Generate & Save to DB`;
+            });
+    });
+
+    // LIVE DATE SCRIPT
+    setInterval(() => {
+        const now = new Date();
+        const clock = document.getElementById('live-clock');
+        if(clock) clock.innerText = now.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    }, 1000);
+
+    // PASSWORD LOGIC
+    window.checkPass = () => {
+        const pin = document.getElementById('passInput').value;
+        if(pin === "912919") {
+            document.getElementById('lock-screen').style.display = "none";
+            document.getElementById('dashboard-content').style.display = "block";
+        } else {
+            alert("Incorrect PIN! Access Denied.");
+            document.getElementById('passInput').value = "";
+        }
+    };
+
+    // SHARE FUNCTIONS
+    window.shareID = () => {
+        const name = document.getElementById('prevName').innerText;
+        const roll = document.getElementById('prevRoll').innerText;
+        const verify = `https://harshitkaushal9129-bit.github.io/Snt-institute.id-card/verify.html?id=${roll}`;
+        const text = `SNT Student ID Details:\nName: ${name}\nRoll: ${roll}\nVerify: ${verify}`;
+        if (navigator.share) {
+            navigator.share({ title: 'Student ID', text: text, url: verify });
+        } else {
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+        }
+    };
+
+    window.shareApp = () => {
+        const appLink = "https://harshitkaushal9129-bit.github.io/Snt-institute.id-card/";
+        const text = "Official Portal of SNT Id card - SNT Computer Institute. Click to open:";
+        if (navigator.share) {
+            navigator.share({ title: 'SNT id card App', text: text, url: appLink });
+        } else {
+            window.open(`https://wa.me/?text=${encodeURIComponent(text + " " + appLink)}`);
+        }
+    };
+
+    window.openInfo = async () => {
+        document.getElementById('info-modal').style.display = "flex";
+        if (navigator.getBattery) {
+            const b = await navigator.getBattery();
+            const batLabel = document.getElementById('info-battery');
+            if(batLabel) batLabel.innerText = Math.round(b.level * 100) + "%";
+        }
+    };
+
+    window.closeInfo = () => document.getElementById('info-modal').style.display = "none";
+    window.openSupportQR = () => document.getElementById('support-qr-modal').style.display = "flex";
+    window.closeSupportQR = () => document.getElementById('support-qr-modal').style.display = "none";
+</script>
+
+<script>
+    // Service Worker Register karne ka code
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('SNT Service Worker Registered!', reg.scope))
+                .catch(err => console.log('Registration Failed:', err));
+        });
+    }
+
+    // Notification Permission maangne ka code
+    if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                console.log('Notification permission granted.');
+            }
+        });
+    }
 </script>
 </body>
 </html>
